@@ -1,6 +1,6 @@
 {
   "name": "functools",
-  "version": "0.0.0",
+  "version": "3.0.0",
   "description": "Utilities for working with functions in JavaScript, with TypeScript",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
