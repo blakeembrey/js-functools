@@ -17,7 +17,7 @@ npm install functools --save
 
 ## Usage
 
-### `identity<T>(arg: T): T`
+### `identity<T>(arg: T) => T`
 
 Always returns the same value that was used as the argument.
 
@@ -25,7 +25,7 @@ Always returns the same value that was used as the argument.
 identity(42) //=> 42
 ```
 
-### `memoize<T, U>(fn: (x: T) => U, cache?: Cache): (x: T) => U`
+### `memoize<T, U>(fn: (x: T) => U, cache?: Cache) => (x: T) => U`
 
 Optimize a function to speed up consecutive calls by caching the result of calls with identical input arguments. The cache can be overrriden to implement features such as LRU eviction.
 
@@ -38,6 +38,22 @@ fn('foo') //=> 1
 
 fn('bar') //=> 2
 fn('bar') //=> 2
+```
+
+### `prop<K>(key: K) => (obj: T) => T[K]`
+
+Return a function that fetches `key` from its operand.
+
+```js
+prop('foo')({ foo: 123 }) //=> 123
+```
+
+### `invoke<K, A, T>(key: K, ...args: A) => (obj: T) => ReturnType<T[K]>`
+
+Return a function that calls the method name on its operand. If additional arguments are given, they will be given to the method as well.
+
+```js
+invoke('add', 5, 5)({ add: (a, b) => a + b }) //=> 10
 ```
 
 ## TypeScript
