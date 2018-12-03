@@ -14,10 +14,27 @@ export interface Cache <T, U> {
  */
 export function memoize <T, U> (fn: (arg: T) => U, cache: Cache<T, U> = new Map()) {
   return function (arg: T): U {
-    if (cache.has(arg)) return cache.get(arg) as U
+    if (cache.has(arg)) return cache.get(arg)!
 
     const result = fn(arg)
     cache.set(arg, result)
+    return result
+  }
+}
+
+/**
+ * Memoize a 0-arg function call.
+ */
+export function memoize0 <T> (fn: () => T) {
+  let cached = false
+  let result: T | undefined = undefined
+
+  return () => {
+    if (!cached) {
+      result = fn()
+      cached = true
+    }
+
     return result
   }
 }

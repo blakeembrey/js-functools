@@ -27,7 +27,7 @@ identity(42) //=> 42
 
 ### `memoize<T, U>(fn: (x: T) => U, cache?: Cache) => (x: T) => U`
 
-Optimize a function to speed up consecutive calls by caching the result of calls with identical input arguments. The cache can be overrriden to implement features such as LRU eviction.
+Optimize a function to speed up consecutive calls by caching the result of calls with identical input arguments. The cache can be overridden for features such as an LRU cache.
 
 ```js
 let i = 0
@@ -39,6 +39,8 @@ fn('foo') //=> 1
 fn('bar') //=> 2
 fn('bar') //=> 2
 ```
+
+See also: `memoize0` for zero-length function arguments.
 
 ### `prop<K>(key: K) => (obj: T) => T[K]`
 

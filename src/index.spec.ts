@@ -19,6 +19,16 @@ describe('functools', () => {
     })
   })
 
+  describe('memoize0', () => {
+    it('should memoize a zero-length function', () => {
+      let i = 0
+      const fn = functools.memoize0(() => ++i)
+
+      expect(fn()).toEqual(1)
+      expect(fn()).toEqual(1)
+    })
+  })
+
   describe('prop', () => {
     const getter = functools.prop('foo')
 
