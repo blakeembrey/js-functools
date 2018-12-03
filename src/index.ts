@@ -79,12 +79,22 @@ export function throttle (fn: () => void, ms: number, leading = true) {
 
   // Wait for the next interval.
   function wait () {
-    timeout = setTimeout(flush, ms)
+    timeout = setTimeout(_next, ms)
   }
 
   // Invoke the function in "pending" state.
   function flush () {
-    if (!pending) return
+    if (pending) return _next()
+  }
+
+  // Clear timeout or flush next function call.
+  function _next () {
+    // When no pending, remove `timeout`.
+    if (!pending) {
+      timeout = undefined
+      return
+    }
+
     clear() // Clear existing timeout.
     fn() // Execute pending function.
     wait() // Start new interval.
@@ -94,7 +104,7 @@ export function throttle (fn: () => void, ms: number, leading = true) {
     pending = true
 
     if (timeout === undefined) {
-      if (leading === true) return flush()
+      if (leading === true) return _next()
       return wait()
     }
   }, { flush, clear })
