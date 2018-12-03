@@ -58,6 +58,26 @@ Return a function that calls the method name on its operand. If additional argum
 invoke('add', 5, 5)({ add: (a, b) => a + b }) //=> 10
 ```
 
+### `throttle(fn: () => void, ms: number, leading = true) => () => void`
+
+Wrap a function to rate-limit the function executions to once every `ms` milliseconds.
+
+```js
+let i = 0
+const fn = throttle(() => ++i, 100)
+
+fn() // i == 1
+fn() // i == 1
+fn() // i == 1
+
+setTimeout(() => /* i == 2 */, 200)
+```
+
+**Tip:** Use `fn.clear` and `fn.flush` for finer execution control.
+
+- `fn.clear` Unconditionally clears the current timeout
+- `fn.flush` When `fn` is pending, executes `fn()` and starts a new interval
+
 ## TypeScript
 
 This module uses [TypeScript](https://github.com/Microsoft/TypeScript) and publishes type definitions on NPM.

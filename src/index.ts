@@ -62,3 +62,40 @@ export type InvokeResult <T extends (...args: A) => any, A extends any[]> = T ex
 export function invoke <K extends string | number | symbol, A extends any[]> (key: K, ...args: A) {
   return <T extends Record<K, (...args: A) => any>> (obj: T): InvokeResult<T[K], A> => obj[key](...args)
 }
+
+/**
+ * Wrap a function to rate-limit the function executions to once every `ms` milliseconds.
+ */
+export function throttle (fn: () => void, ms: number, leading = true) {
+  let pending = false
+  let timeout: any = undefined
+
+  // Clear timeout.
+  function clear () {
+    pending = false
+    clearTimeout(timeout)
+    timeout = undefined
+  }
+
+  // Wait for the next interval.
+  function wait () {
+    timeout = setTimeout(flush, ms)
+  }
+
+  // Invoke the function in "pending" state.
+  function flush () {
+    if (!pending) return
+    clear() // Clear existing timeout.
+    fn() // Execute pending function.
+    wait() // Start new interval.
+  }
+
+  return Object.assign(() => {
+    pending = true
+
+    if (timeout === undefined) {
+      if (leading === true) return flush()
+      return wait()
+    }
+  }, { flush, clear })
+}
