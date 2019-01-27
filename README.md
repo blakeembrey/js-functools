@@ -22,7 +22,7 @@ npm install functools --save
 Always returns the same value that was used as the argument.
 
 ```js
-identity(42) //=> 42
+identity(42); //=> 42
 ```
 
 ### `memoize<T, U>(fn: (x: T) => U, cache?: Cache) => (x: T) => U`
@@ -30,14 +30,14 @@ identity(42) //=> 42
 Optimize a function to speed up consecutive calls by caching the result of calls with identical input arguments. The cache can be overridden for features such as an LRU cache.
 
 ```js
-let i = 0
-const fn = memoize(() => ++i)
+let i = 0;
+const fn = memoize(() => ++i);
 
-fn('foo') //=> 1
-fn('foo') //=> 1
+fn("foo"); //=> 1
+fn("foo"); //=> 1
 
-fn('bar') //=> 2
-fn('bar') //=> 2
+fn("bar"); //=> 2
+fn("bar"); //=> 2
 ```
 
 See also: `memoize0` for zero-length function arguments.
@@ -47,7 +47,7 @@ See also: `memoize0` for zero-length function arguments.
 Return a function that fetches `key` from its operand.
 
 ```js
-prop('foo')({ foo: 123 }) //=> 123
+prop("foo")({ foo: 123 }); //=> 123
 ```
 
 ### `invoke<K, A, T>(key: K, ...args: A) => (obj: T) => ReturnType<T[K]>`
@@ -55,7 +55,7 @@ prop('foo')({ foo: 123 }) //=> 123
 Return a function that calls the method name on its operand. If additional arguments are given, they will be given to the method as well.
 
 ```js
-invoke('add', 5, 5)({ add: (a, b) => a + b }) //=> 10
+invoke("add", 5, 5)({ add: (a, b) => a + b }); //=> 10
 ```
 
 ### `throttle(fn: () => void, ms: number, leading = true) => () => void`
