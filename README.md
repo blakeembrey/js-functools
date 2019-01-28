@@ -73,6 +73,14 @@ fn() // i == 1
 setTimeout(() => /* i == 2 */, 200)
 ```
 
+### `spread<T, R>(fn: (...args: T) => R) => (args: T) => R`
+
+Given a `fn`, return a wrapper that accepts an array of `fn` arguments.
+
+```js
+Promise.all([1, 2, 3]).then(spread(add));
+```
+
 **Tip:** Use `fn.clear` and `fn.flush` for finer execution control.
 
 - `fn.clear` Unconditionally clears the current timeout

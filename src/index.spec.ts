@@ -107,4 +107,13 @@ describe("functools", () => {
       }, 100);
     });
   });
+
+  describe("spread", () => {
+    it("should spread function arguments", () => {
+      const add = (a: number, b: number) => a + b;
+      const fn = functools.spread(add);
+
+      expect(fn([1, 2])).toEqual(3);
+    });
+  });
 });

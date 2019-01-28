@@ -123,3 +123,10 @@ export function throttle(fn: () => void, ms: number, leading = true) {
     { flush, clear }
   );
 }
+
+/**
+ * Given a `fn`, return a wrapper that accepts an array of `fn` arguments.
+ */
+export function spread<T extends any[], R>(fn: (...args: T) => R) {
+  return (args: T) => fn(...args);
+}
