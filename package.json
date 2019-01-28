@@ -9,12 +9,12 @@
   ],
   "scripts": {
     "prettier": "prettier --write",
-    "format": "npm run prettier -- \"{.,src/**}/*.{js,ts,json,md,yml}\"",
+    "format": "npm run prettier -- \"{.,src/**}/*.{js,ts,json,md,yml,css}\"",
     "lint": "tslint \"src/**/*.ts\" --project tsconfig.json",
     "build": "rm -rf dist/ && tsc",
     "specs": "jest --coverage",
     "test": "npm run lint && npm run build && npm run specs",
-    "prepublish": "npm run build"
+    "prepare": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -59,7 +59,7 @@
     }
   },
   "lint-staged": {
-    "*.{js,json,css,md}": [
+    "*.{js,ts,json,md,yml,css}": [
       "npm run prettier",
       "git add"
     ]
