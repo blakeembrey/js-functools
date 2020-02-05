@@ -37,6 +37,22 @@ describe("functools", () => {
     });
   });
 
+  describe("memoizeOne", () => {
+    it("should memoize a zero-length function", () => {
+      let i = 0;
+      const fn = functools.memoizeOne((x: string) => ++i);
+
+      expect(fn("foo")).toEqual(1);
+      expect(fn("foo")).toEqual(1);
+
+      expect(fn("bar")).toEqual(2);
+      expect(fn("bar")).toEqual(2);
+
+      expect(fn("foo")).toEqual(3);
+      expect(fn("foo")).toEqual(3);
+    });
+  });
+
   describe("prop", () => {
     const getter = functools.prop("foo");
 

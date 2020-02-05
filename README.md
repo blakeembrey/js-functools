@@ -48,7 +48,36 @@ fn("bar"); //=> 2
 fn("bar"); //=> 2
 ```
 
-**See also:** `memoize0` for zero-length function arguments.
+### `memoize0<T>(fn: () => T): () => T`
+
+Memoize the result of `fn` after the first invocation.
+
+```js
+let i = 0;
+const fn = memoize0(() => ++i);
+
+fn(); // => 1
+fn(); // => 1
+fn(); // => 1
+```
+
+### `memoizeOne<T, R>(fn: (...args: T) => R) => (...args: T) => R`
+
+Memoize the result of a function based on the most recent arguments.
+
+```js
+let i = 0;
+const fn = memoize(() => ++i);
+
+fn("foo"); //=> 1
+fn("foo"); //=> 1
+
+fn("bar"); //=> 2
+fn("bar"); //=> 2
+
+fn("foo"); //=> 3
+fn("foo"); //=> 3
+```
 
 ### `prop<K>(key: K) => (obj: T) => T[K]`
 

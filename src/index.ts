@@ -24,7 +24,7 @@ export interface Cache<T, U> {
 
 /**
  * Optimize a function to speed up consecutive calls by caching the result of
- * calls with identical input arguments. The cache can be overrriden to
+ * calls with identical input arguments. The cache can be overridden to
  * implement features such as LRU eviction.
  */
 export function memoize<T, U>(
@@ -41,19 +41,50 @@ export function memoize<T, U>(
 }
 
 /**
- * Memoize a 0-arg function call.
+ * Memoize the result of `fn` after the first invocation.
  */
 export function memoize0<T>(fn: () => T) {
   let cached = false;
   let result: T | undefined = undefined;
 
-  return () => {
+  return (): T => {
     if (!cached) {
       result = fn();
       cached = true;
     }
 
-    return result;
+    return result!;
+  };
+}
+
+/**
+ * Compare two arrays for equality.
+ */
+export function arrayEqual<T extends any[]>(prev: T, next: T) {
+  const len = next.length;
+  if (prev.length !== len) return false;
+
+  for (let i = 0; i < len; i++) {
+    if (!Object.is(prev[i], next[i])) return false;
+  }
+
+  return true;
+}
+
+/**
+ * Memoize the result of a function based on the most recent arguments.
+ */
+export function memoizeOne<T extends any[], R>(fn: (...args: T) => R) {
+  let prevArgs: T | undefined;
+  let result: R | undefined;
+
+  return (...args: T): R => {
+    if (prevArgs === undefined || !arrayEqual(args, prevArgs)) {
+      prevArgs = args;
+      result = fn(...args);
+    }
+
+    return result!;
   };
 }
 
@@ -82,6 +113,9 @@ export function invoke<K extends string | number | symbol, A extends any[]>(
   ): InvokeResult<T[K], A> => obj[key](...args);
 }
 
+/**
+ * Throttle configuration.
+ */
 export interface ThrottleOptions {
   leading?: boolean;
   trailing?: boolean;
