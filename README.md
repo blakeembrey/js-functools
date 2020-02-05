@@ -152,10 +152,7 @@ sequence(partial(add, 10), partial(multiply, 5))(5); //=> 75
 Right-to-left function composition.
 
 ```js
-compose(
-  partial(add, 10),
-  partial(multiply, 5)
-)(5); //=> 35
+compose(partial(add, 10), partial(multiply, 5))(5); //=> 35
 ```
 
 ### `nary<T, R>(n: number, fn: (...args: T) => R) => (...args: T) => R`
