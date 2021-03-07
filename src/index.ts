@@ -31,8 +31,8 @@ export function memoize<T, U>(
   fn: (arg: T) => U,
   cache: Cache<T, U> = new Map()
 ) {
-  return function(arg: T): U {
-    if (cache.has(arg)) return cache.get(arg)!;
+  return function (arg: T): U {
+    if (cache.has(arg)) return cache.get(arg) as U;
 
     const result = fn(arg);
     cache.set(arg, result);
@@ -53,14 +53,14 @@ export function memoize0<T>(fn: () => T) {
       cached = true;
     }
 
-    return result!;
+    return result as T;
   };
 }
 
 /**
  * Compare two arrays for equality.
  */
-export function arrayEqual<T extends any[]>(prev: T, next: T) {
+export function arrayEqual<T extends unknown[]>(prev: T, next: T) {
   const len = next.length;
   if (prev.length !== len) return false;
 
@@ -74,7 +74,7 @@ export function arrayEqual<T extends any[]>(prev: T, next: T) {
 /**
  * Memoize the result of a function based on the most recent arguments.
  */
-export function memoizeOne<T extends any[], R>(fn: (...args: T) => R) {
+export function memoizeOne<T extends unknown[], R>(fn: (...args: T) => R) {
   let prevArgs: T | undefined;
   let result: R | undefined;
 
@@ -84,7 +84,7 @@ export function memoizeOne<T extends any[], R>(fn: (...args: T) => R) {
       result = fn(...args);
     }
 
-    return result!;
+    return result as R;
   };
 }
 
@@ -92,23 +92,23 @@ export function memoizeOne<T extends any[], R>(fn: (...args: T) => R) {
  * Return a function that fetches `key` from its operand.
  */
 export function prop<K extends string | number | symbol>(key: K) {
-  return <T extends { [T in K]?: any }>(obj: T): T[K] => obj[key];
+  return <T extends { [T in K]?: unknown }>(obj: T): T[K] => obj[key];
 }
 
 export type InvokeResult<
-  T extends (...args: A) => any,
-  A extends any[]
+  T extends (...args: A) => unknown,
+  A extends unknown[]
 > = T extends (...args: A) => infer R ? R : never;
 
 /**
  * Return a function that calls the method name on its operand. If additional
  * arguments are given, they will be given to the method as well.
  */
-export function invoke<K extends string | number | symbol, A extends any[]>(
+export function invoke<K extends string | number | symbol, A extends unknown[]>(
   key: K,
   ...args: A
 ) {
-  return <T extends Record<K, (...args: A) => any>>(
+  return <T extends Record<K, (...args: A) => InvokeResult<T[K], A>>>(
     obj: T
   ): InvokeResult<T[K], A> => obj[key](...args);
 }
@@ -125,24 +125,24 @@ export interface ThrottleOptions {
 /**
  * Wrap a function to rate-limit the function executions to once every `ms` milliseconds.
  */
-export function throttle<T extends any[]>(
+export function throttle<T extends unknown[]>(
   fn: (...args: T) => void,
   ms: number,
   { leading = true, trailing = true, debounce = false }: ThrottleOptions = {}
 ) {
   let pending: T | undefined;
-  let timeout: any = undefined;
+  let timeout: NodeJS.Timeout | undefined = undefined;
 
   // Clear timeout.
   function clear() {
-    clearTimeout(timeout);
+    if (timeout) clearTimeout(timeout);
     timeout = undefined;
     pending = undefined;
   }
 
   // Invoke the function in "pending" state.
   function flush() {
-    clearTimeout(timeout);
+    if (timeout) clearTimeout(timeout);
     return next();
   }
 
@@ -184,7 +184,7 @@ export function throttle<T extends any[]>(
 /**
  * Given a `fn`, return a wrapper that accepts an array of `fn` arguments.
  */
-export function spread<T extends any[], R>(fn: (...args: T) => R) {
+export function spread<T extends unknown[], R>(fn: (...args: T) => R) {
   return (args: T) => fn(...args);
 }
 
@@ -198,32 +198,32 @@ export function flip<T1, T2, R>(fn: (arg1: T1, arg2: T2) => R) {
 /**
  * Returns a partially applied `fn` with the supplied arguments.
  */
-export function partial<U extends any[], R>(
+export function partial<U extends unknown[], R>(
   fn: (...args: U) => R
 ): (...args: U) => R;
-export function partial<T1, U extends any[], R>(
+export function partial<T1, U extends unknown[], R>(
   fn: (arg1: T1, ...args: U) => R,
   arg1: T1
 ): (...args: U) => R;
-export function partial<T1, T2, U extends any[], R>(
+export function partial<T1, T2, U extends unknown[], R>(
   fn: (arg1: T1, arg2: T2, ...args: U) => R,
   arg1: T1,
   arg2: T2
 ): (...args: U) => R;
-export function partial<T1, T2, T3, U extends any[], R>(
+export function partial<T1, T2, T3, U extends unknown[], R>(
   fn: (arg1: T1, arg2: T2, arg3: T3, ...args: U) => R,
   arg1: T1,
   arg2: T2,
   arg3: T3
 ): (...args: U) => R;
-export function partial<T1, T2, T3, T4, U extends any[], R>(
+export function partial<T1, T2, T3, T4, U extends unknown[], R>(
   fn: (arg1: T1, arg2: T2, arg3: T3, arg4: T4, ...args: U) => R,
   arg1: T1,
   arg2: T2,
   arg3: T3,
   arg4: T4
 ): (...args: U) => R;
-export function partial<T1, T2, T3, T4, T5, U extends any[], R>(
+export function partial<T1, T2, T3, T4, T5, U extends unknown[], R>(
   fn: (arg1: T1, arg2: T2, arg3: T3, arg4: T4, arg5: T5, ...args: U) => R,
   arg1: T1,
   arg2: T2,
@@ -231,11 +231,22 @@ export function partial<T1, T2, T3, T4, T5, U extends any[], R>(
   arg4: T4,
   arg5: T5
 ): (...args: U) => R;
-export function partial<R>(fn: (...args: any[]) => R, ...args1: any[]) {
-  return (...args2: any[]) => fn(...args1, ...args2);
+export function partial<R>(fn: (...args: unknown[]) => R, ...args1: unknown[]) {
+  return (...args2: unknown[]) => fn(...args1, ...args2);
 }
 
-const SEQUENCE_FNS: Record<number, Function | undefined> = Object.create(null);
+/**
+ * `sequence` proxy function.
+ */
+type SequenceProxy<T, R> = (...fns: Array<(arg: T) => T>) => (arg: T) => R;
+
+/**
+ * Cache for `sequence` proxy functions.
+ */
+const SEQUENCE_FNS: Record<
+  number,
+  SequenceProxy<unknown, unknown> | undefined
+> = Object.create(null);
 
 /**
  * Left-to-right function composition.
@@ -265,22 +276,32 @@ export function sequence<T1, T2, T3, T4, T5, T6>(
 ): (arg: T1) => T6;
 export function sequence<T>(...fns: Array<(arg: T) => T>) {
   const n = fns.length;
-  let fn = SEQUENCE_FNS[n];
 
-  if (!fn) {
+  if (!(n in SEQUENCE_FNS)) {
     const params = fns.map((_, i) => `_${i}`);
     const seq = params.reduce((x, p) => `${p}(${x})`, "x");
 
-    fn = SEQUENCE_FNS[n] = new Function(
+    SEQUENCE_FNS[n] = new Function(
       ...params,
       `return function sequence${n}(x) { return ${seq}; }`
-    );
+    ) as SequenceProxy<unknown, unknown>;
   }
 
-  return fn(...fns);
+  return ((SEQUENCE_FNS[n] as unknown) as SequenceProxy<T, T>)(...fns);
 }
 
-const COMPOSE_FNS: Record<number, Function | undefined> = Object.create(null);
+/**
+ * `compose` proxy function.
+ */
+type ComposeProxy<T, R> = (...fns: Array<(arg: T) => T>) => (arg: T) => R;
+
+/**
+ * Cache for `compose` proxy functions.
+ */
+const COMPOSE_FNS: Record<
+  number,
+  ComposeProxy<unknown, unknown> | undefined
+> = Object.create(null);
 
 /**
  * Right-to-left function composition.
@@ -308,64 +329,74 @@ export function compose<T1, T2, T3, T4, T5, T6>(
   fn2: (arg: T2) => T3,
   fn1: (arg: T1) => T2
 ): (arg: T1) => T6;
-export function compose<T>(...fns: Array<(arg: T) => T>) {
+export function compose<T>(...fns: Array<(arg: T) => T>): (arg: T) => T {
   const n = fns.length;
-  let fn = COMPOSE_FNS[n];
 
-  if (!fn) {
+  if (!(n in COMPOSE_FNS)) {
     const params = fns.map((_, i) => `_${i}`);
     const seq = params.reduceRight((x, p) => `${p}(${x})`, "x");
 
-    fn = COMPOSE_FNS[n] = new Function(
+    COMPOSE_FNS[n] = new Function(
       ...params,
       `return function compose${n}(x) { return ${seq}; }`
-    );
+    ) as ComposeProxy<unknown, unknown>;
   }
 
-  return fn(...fns);
+  return ((COMPOSE_FNS[n] as unknown) as ComposeProxy<T, T>)(...fns);
 }
 
-const NARY_FNS: Record<number, Function | undefined> = Object.create(null);
+/**
+ * `nary` proxy function.
+ */
+type NaryProxy<T extends unknown[], R> = (
+  fn: (...args: T) => R
+) => (...args: T) => R;
+
+/**
+ * Cache for `nary` proxy functions.
+ */
+const NARY_FNS: Record<
+  number,
+  NaryProxy<unknown[], unknown> | undefined
+> = Object.create(null);
 
 /**
  * Fix the number of receivable arguments in `origFn` to `n`.
  */
-export function nary<U extends any[], R>(n: 0, origFn: () => R): () => R;
-export function nary<T1, U extends any[], R>(
-  n: 1,
-  origFn: (arg1: T1) => R
-): (arg1: T1) => R;
-export function nary<T1, T2, U extends any[], R>(
+export function nary<R>(n: 0, origFn: () => R): () => R;
+export function nary<T1, R>(n: 1, origFn: (arg1: T1) => R): (arg1: T1) => R;
+export function nary<T1, T2, R>(
   n: 2,
   origFn: (arg1: T1, arg2: T2) => R
 ): (arg1: T1, arg2: T2) => R;
-export function nary<T1, T2, T3, U extends any[], R>(
+export function nary<T1, T2, T3, R>(
   n: 3,
   origFn: (arg1: T1, arg2: T2, arg3: T3) => R
 ): (arg1: T1, arg2: T2, arg3: T3) => R;
-export function nary<T1, T2, T3, T4, U extends any[], R>(
+export function nary<T1, T2, T3, T4, R>(
   n: 4,
   origFn: (arg1: T1, arg2: T2, arg3: T3, arg4: T4) => R
 ): (arg1: T1, arg2: T2, arg3: T3, arg4: T4) => R;
-export function nary<T1, T2, T3, T4, T5, U extends any[], R>(
+export function nary<T1, T2, T3, T4, T5, R>(
   n: 5,
   origFn: (arg1: T1, arg2: T2, arg3: T3, arg4: T4, arg5: T5) => R
 ): (arg1: T1, arg2: T2, arg3: T3, arg4: T4, arg5: T5) => R;
-export function nary<T1, T2, T3, T4, T5, T6, U extends any[], R>(
+export function nary<T1, T2, T3, T4, T5, T6, R>(
   n: 6,
   origFn: (arg1: T1, arg2: T2, arg3: T3, arg4: T4, arg5: T5, arg6: T6) => R
 ): (arg1: T1, arg2: T2, arg3: T3, arg4: T4, arg5: T5, arg6: T6) => R;
-export function nary<U extends any[], R>(n: number, origFn: (...args: U) => R) {
-  let fn = NARY_FNS[n];
-
-  if (!fn) {
+export function nary<T extends unknown[], R>(
+  n: number,
+  origFn: (...args: T) => R
+): (...args: T) => R {
+  if (!(n in NARY_FNS)) {
     const args = Array.from({ length: n }, (_, i) => `_${i}`).join(", ");
 
-    fn = NARY_FNS[n] = new Function(
+    NARY_FNS[n] = new Function(
       "origFn",
       `return function nary${n}(${args}) { return origFn(${args}); }`
-    );
+    ) as NaryProxy<unknown[], unknown>;
   }
 
-  return fn(origFn);
+  return ((NARY_FNS[n] as unknown) as NaryProxy<T, R>)(origFn);
 }

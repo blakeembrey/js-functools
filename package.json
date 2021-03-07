@@ -8,13 +8,11 @@
     "dist/"
   ],
   "scripts": {
-    "prettier": "prettier --write",
-    "format": "npm run prettier -- \"{.,src/**}/*.{js,ts,json,md,yml,css}\"",
-    "lint": "tslint \"src/**/*.ts\" --project tsconfig.json",
-    "build": "rm -rf dist/ && tsc",
-    "specs": "jest --coverage",
-    "test": "npm run lint && npm run build && npm run specs",
-    "prepare": "npm run build"
+    "lint": "ts-scripts lint",
+    "format": "ts-scripts format",
+    "specs": "ts-scripts specs",
+    "test": "ts-scripts test",
+    "prepare": "ts-scripts install && ts-scripts build"
   },
   "repository": {
     "type": "git",
@@ -36,49 +34,13 @@
     "url": "https://github.com/blakeembrey/js-functools/issues"
   },
   "homepage": "https://github.com/blakeembrey/js-functools",
-  "jest": {
-    "roots": [
-      "<rootDir>/src/"
-    ],
-    "transform": {
-      "\\.tsx?$": "ts-jest"
-    },
-    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(tsx?|jsx?)$",
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "jsx",
-      "json",
-      "node"
-    ]
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "*.{js,ts,json,md,yml,css}": [
-      "npm run prettier",
-      "git add"
-    ]
-  },
   "publishConfig": {
     "access": "public"
   },
   "devDependencies": {
-    "@types/jest": "^25.1.1",
-    "@types/node": "^13.7.0",
-    "husky": "^4.2.1",
-    "jest": "^25.1.0",
-    "lint-staged": "^10.0.7",
-    "prettier": "^1.19.1",
-    "rimraf": "^3.0.1",
-    "ts-jest": "^25.2.0",
-    "tslint": "^6.0.0",
-    "tslint-config-prettier": "^1.17.0",
-    "tslint-config-standard": "^9.0.0",
-    "typescript": "^3.7.5"
+    "@borderless/ts-scripts": "^0.0.11",
+    "@types/jest": "^26.0.20",
+    "@types/node": "^14.14.31",
+    "typescript": "^4.2.3"
   }
 }

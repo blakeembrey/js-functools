@@ -40,7 +40,7 @@ describe("functools", () => {
   describe("memoizeOne", () => {
     it("should memoize a zero-length function", () => {
       let i = 0;
-      const fn = functools.memoizeOne((x: string) => ++i);
+      const fn = functools.memoizeOne((_: string) => ++i);
 
       expect(fn("foo")).toEqual(1);
       expect(fn("foo")).toEqual(1);
@@ -66,7 +66,7 @@ describe("functools", () => {
   });
 
   describe("throttle", () => {
-    it("should throttle function calls", done => {
+    it("should throttle function calls", (done) => {
       let i = 0;
       const fn = functools.throttle(() => ++i, 100);
 
@@ -85,7 +85,7 @@ describe("functools", () => {
       }, 100);
     });
 
-    it("should throttle function calls without leading call", done => {
+    it("should throttle function calls without leading call", (done) => {
       let i = 0;
       const fn = functools.throttle(() => ++i, 100, { leading: false });
 
@@ -100,7 +100,7 @@ describe("functools", () => {
       }, 110);
     });
 
-    it("should flush the function call", done => {
+    it("should flush the function call", (done) => {
       let i = 0;
       const fn = functools.throttle(() => ++i, 100);
 
@@ -127,10 +127,10 @@ describe("functools", () => {
       }, 100);
     });
 
-    it("should skip trailing calls", done => {
+    it("should skip trailing calls", (done) => {
       let i = 0;
       const fn = functools.throttle(() => ++i, 100, {
-        trailing: false
+        trailing: false,
       });
 
       fn();
@@ -152,11 +152,11 @@ describe("functools", () => {
       }, 210);
     });
 
-    it("should debounce function execution", done => {
+    it("should debounce function execution", (done) => {
       let i = 0;
       const fn = functools.throttle(() => ++i, 100, {
         leading: false,
-        debounce: true
+        debounce: true,
       });
 
       fn();
