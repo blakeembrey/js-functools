@@ -153,15 +153,14 @@ describe("functools", () => {
     });
 
     it("should debounce function execution", (done) => {
-      let i = 0;
-      const fn = functools.throttle(() => ++i, 100, {
+      const spy = jest.fn();
+      const fn = functools.throttle(spy, 100, {
         leading: false,
         debounce: true,
       });
 
       fn();
-
-      expect(i).toEqual(0);
+      expect(spy).toBeCalledTimes(0);
 
       // Tracks `pending` for first "event loop".
       setTimeout(() => fn(), 20);
@@ -170,12 +169,12 @@ describe("functools", () => {
       setTimeout(() => fn(), 80);
 
       // Nothing happened between loops with `debounce` set.
-      setTimeout(() => expect(i).toEqual(0), 130);
+      setTimeout(() => expect(spy).toBeCalledTimes(0), 130);
 
       setTimeout(() => {
-        expect(i).toEqual(1); // Executed after debounce.
+        expect(spy).toBeCalledTimes(1); // Executed after debounce.
         return done();
-      }, 190);
+      }, 250);
     });
   });
 
