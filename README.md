@@ -1,9 +1,9 @@
 # Functools
 
-[![NPM version](https://img.shields.io/npm/v/functools.svg?style=flat)](https://npmjs.org/package/functools)
-[![NPM downloads](https://img.shields.io/npm/dm/functools.svg?style=flat)](https://npmjs.org/package/functools)
-[![Build status](https://img.shields.io/travis/blakeembrey/js-functools.svg?style=flat)](https://travis-ci.org/blakeembrey/js-functools)
-[![Test coverage](https://img.shields.io/coveralls/blakeembrey/js-functools.svg?style=flat)](https://coveralls.io/r/blakeembrey/js-functools?branch=master)
+[![NPM version][npm-image]][npm-url]
+[![NPM downloads][downloads-image]][downloads-url]
+[![Build status][build-image]][build-url]
+[![Build coverage][coverage-image]][coverage-url]
 
 > Utilities for working with functions in JavaScript, with TypeScript.
 
@@ -170,3 +170,12 @@ This module uses [TypeScript](https://github.com/Microsoft/TypeScript) and publi
 ## License
 
 Apache 2.0
+
+[npm-image]: https://img.shields.io/npm/v/functools
+[npm-url]: https://npmjs.org/package/functools
+[downloads-image]: https://img.shields.io/npm/dm/functools
+[downloads-url]: https://npmjs.org/package/functools
+[build-image]: https://img.shields.io/github/workflow/status/blakeembrey/js-functools/CI/main
+[build-url]: https://github.com/blakeembrey/js-functools/actions/workflows/ci.yml?query=branch%3Amain
+[coverage-image]: https://img.shields.io/codecov/c/gh/blakeembrey/js-functools
+[coverage-url]: https://codecov.io/gh/blakeembrey/js-functools
