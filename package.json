@@ -29,7 +29,8 @@
     "lint": "ts-scripts lint",
     "prepare": "ts-scripts install && ts-scripts build",
     "specs": "ts-scripts specs",
-    "test": "ts-scripts test"
+    "test": "ts-scripts test",
+    "benchmark": "node --loader=ts-node/esm benchmark/index.ts"
   },
   "files": [
     "dist/"
@@ -44,6 +45,7 @@
     "@borderless/ts-scripts": "^0.1.0",
     "@types/jest": "^26.0.20",
     "@types/node": "^14.14.31",
+    "ts-node": "^9.1.1",
     "typescript": "^4.2.3"
   },
   "types": "dist/index.d.ts"

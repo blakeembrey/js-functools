@@ -1,3 +1,7 @@
+/**
+ * Unique symbol used as a flag.
+ */
+export const SENTINEL_VALUE = Symbol("SENTINEL_VALUE");
 export const add = (a: number, b: number) => a + b;
 export const subtract = (a: number, b: number) => a - b;
 export const multiply = (a: number, b: number) => a * b;
@@ -43,17 +47,12 @@ export function memoize<T, U>(
 /**
  * Memoize the result of `fn` after the first invocation.
  */
-export function memoize0<T>(fn: () => T) {
-  let cached = false;
-  let result: T | undefined = undefined;
+export function memoize0<T>(fn: () => T): () => T {
+  let result: T | typeof SENTINEL_VALUE = SENTINEL_VALUE;
 
   return (): T => {
-    if (!cached) {
-      result = fn();
-      cached = true;
-    }
-
-    return result as T;
+    if (result === SENTINEL_VALUE) result = fn();
+    return result;
   };
 }
 
