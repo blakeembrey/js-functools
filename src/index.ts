@@ -2,9 +2,25 @@
  * Unique symbol used as a flag.
  */
 export const SENTINEL_VALUE = Symbol("SENTINEL_VALUE");
+
+/**
+ * Add one number to the other.
+ */
 export const add = (a: number, b: number) => a + b;
+
+/**
+ * Subtract one number from the other.
+ */
 export const subtract = (a: number, b: number) => a - b;
+
+/**
+ * Multiply one number by the other.
+ */
 export const multiply = (a: number, b: number) => a * b;
+
+/**
+ * Divide one number by the other.
+ */
 export const divide = (a: number, b: number) => a / b;
 
 /**
